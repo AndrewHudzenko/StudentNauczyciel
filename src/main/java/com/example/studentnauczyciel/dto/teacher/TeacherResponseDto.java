@@ -1,13 +1,17 @@
 package com.example.studentnauczyciel.dto.teacher;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 public class TeacherResponseDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private int age;
+    private Integer age;
     private String email;
     private String subject;
+    private Set<Long> studentsIds;
 }

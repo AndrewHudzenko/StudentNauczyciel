@@ -26,6 +26,7 @@ public class Student {
     private Long id;
     private String firstName;
     private String lastName;
+    private Integer age;
     private String email;
     private String direction;
 
@@ -36,16 +37,6 @@ public class Student {
     public void addTeacher(Teacher teacher) {
         this.teachers.add(teacher);
         teacher.getStudents().add(this);
-    }
-
-    public void removeTeacher(long teacherId) {
-        Teacher teacher = this.teachers.stream()
-                .filter(t -> t.getId() == teacherId)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Student does not have teacher with Id: "
-                        + teacherId));
-        this.teachers.remove(teacher);
-        teacher.getStudents().remove(this);
     }
 
     @Override
@@ -60,13 +51,24 @@ public class Student {
         return Objects.equals(id, student.id)
                 && Objects.equals(firstName, student.firstName)
                 && Objects.equals(lastName, student.lastName)
+                && Objects.equals(age, student.age)
                 && Objects.equals(email, student.email)
                 && Objects.equals(direction, student.direction);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, direction);
+        return Objects.hash(id, firstName, lastName, age, email, direction);
+    }
+
+    public void removeTeacher(long teacherId) {
+        Teacher teacher = this.teachers.stream()
+                .filter(t -> t.getId() == teacherId)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Student doesn't have teacher with Id: "
+                        + teacherId));
+        this.teachers.remove(teacher);
+        teacher.getStudents().remove(this);
     }
 
     @PreRemove

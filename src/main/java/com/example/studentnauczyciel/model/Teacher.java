@@ -42,21 +42,6 @@ public class Teacher {
     )
     private Set<Student> students = new HashSet<>();
 
-    public void addStudent(Student student) {
-        this.students.add(student);
-        student.getTeachers().add(this);
-    }
-
-    public void removeStudent(long studentId) {
-        Student student = this.students.stream()
-                .filter(t -> t.getId() == studentId)
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Teacher does not have student with Id: "
-                        + studentId));
-        this.students.remove(student);
-        student.getTeachers().remove(this);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -77,6 +62,21 @@ public class Teacher {
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, age, email, subject);
+    }
+
+    public void addStudent(Student student) {
+        this.students.add(student);
+        student.getTeachers().add(this);
+    }
+
+    public void removeStudent(long studentId) {
+        Student student = this.students.stream()
+                .filter(t -> t.getId() == studentId)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Teacher doesn't have student with Id: "
+                        + studentId));
+        this.students.remove(student);
+        student.getTeachers().remove(this);
     }
 
     @PreRemove

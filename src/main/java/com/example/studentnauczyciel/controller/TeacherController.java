@@ -11,7 +11,6 @@ import com.example.studentnauczyciel.model.Teacher;
 import com.example.studentnauczyciel.service.StudentService;
 import com.example.studentnauczyciel.service.TeacherService;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import jakarta.validation.Valid;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/teachers")
 @AllArgsConstructor
+@RequestMapping("/teachers")
 public class TeacherController {
     private final TeacherService teacherService;
     private final TeacherMapper teacherMapper;
@@ -68,25 +67,25 @@ public class TeacherController {
 
     @GetMapping("/{teacherId}/students")
     @ApiOperation(value = "Get a sorted list of all students by teacher ID")
-    public List<StudentResponseDto> getAllStudentsByTeacherId(
+    public Set<StudentResponseDto> getAllStudentsByTeacherId(
             @PathVariable(value = "teacherId") Long teacherId) {
         teacherService.findById(teacherId);
-        List<Student> students = studentService.findAllByTeacherId(teacherId);
+        Set<Student> students = studentService.findAllByTeacherId(teacherId);
         return students.stream()
                 .map(studentMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @GetMapping
     @ApiOperation(value = "Get a sorted list of teachers by parameters")
-    public List<TeacherResponseDto> findAll(@RequestParam(defaultValue = "0") Integer page,
+    public Set<TeacherResponseDto> findAll(@RequestParam(defaultValue = "0") Integer page,
                                             @RequestParam(defaultValue = "10") Integer count,
                                             @RequestParam(defaultValue = "id") String sortBy) {
         Sort sort = Sort.by(Parser.getSortOrders(sortBy));
         PageRequest pageRequest = PageRequest.of(page, count, sort);
         return teacherService.findAll(pageRequest).stream()
                 .map(teacherMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @PutMapping("/{id}")

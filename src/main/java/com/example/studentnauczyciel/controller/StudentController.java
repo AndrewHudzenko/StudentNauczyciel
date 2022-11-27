@@ -11,7 +11,6 @@ import com.example.studentnauczyciel.model.Teacher;
 import com.example.studentnauczyciel.service.StudentService;
 import com.example.studentnauczyciel.service.TeacherService;
 import io.swagger.annotations.ApiOperation;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import jakarta.validation.Valid;
@@ -29,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/students")
 @AllArgsConstructor
+@RequestMapping("/students")
 public class StudentController {
     private final StudentService studentService;
     private final StudentMapper studentMapper;
@@ -69,25 +68,25 @@ public class StudentController {
 
     @GetMapping
     @ApiOperation(value = "Get a sorted list of students by parameters")
-    public List<StudentResponseDto> findAll(@RequestParam(defaultValue = "0") Integer page,
+    public Set<StudentResponseDto> findAll(@RequestParam(defaultValue = "0") Integer page,
                                             @RequestParam(defaultValue = "10") Integer count,
                                             @RequestParam(defaultValue = "id") String sortBy) {
         Sort sort = Sort.by(Parser.getSortOrders(sortBy));
         PageRequest pageRequest = PageRequest.of(page, count, sort);
         return studentService.findAll(pageRequest).stream()
                 .map(studentMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @GetMapping("/{studentId}/teachers")
     @ApiOperation(value = "Get a sorted list of all teachers by student ID")
-    public List<TeacherResponseDto> getAllTeachersByStudentId(
+    public Set<TeacherResponseDto> getAllTeachersByStudentId(
             @PathVariable(value = "studentId") Long studentId) {
         studentService.findById(studentId);
-        List<Teacher> teachers = teacherService.findAllByStudentId(studentId);
+        Set<Teacher> teachers = teacherService.findAllByStudentId(studentId);
         return teachers.stream()
                 .map(teacherMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @PutMapping("/{id}")
@@ -102,7 +101,7 @@ public class StudentController {
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete a student by id")
     public void delete(@PathVariable(value = "id") Long id) {
-        studentService.delete(id);
+        studentService.deleteById(id);
     }
 
     @DeleteMapping("/{studentId}/teachers/{teacherId}")

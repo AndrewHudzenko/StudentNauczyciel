@@ -1,6 +1,5 @@
 package com.example.studentnauczyciel.service.impl;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.example.studentnauczyciel.model.Student;
@@ -12,8 +11,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
@@ -30,25 +29,25 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findAll(PageRequest pageRequest) {
-        return studentRepository.findAll(pageRequest).stream().collect(Collectors.toList());
+    public Set<Student> findAll(PageRequest pageRequest) {
+        return studentRepository.findAll(pageRequest).stream().collect(Collectors.toSet());
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         studentRepository.deleteById(id);
     }
 
     @Override
     public Student findByFirstNameAndLastName(String firstName, String lastName) {
-        return studentRepository.findByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName)
+        return studentRepository.findStudentByFirstNameAndLastName(firstName, lastName)
                 .orElseThrow(
                         () -> new RuntimeException("Can't find a student by first name: "
                                 + firstName + " and last name: " + lastName));
     }
 
     @Override
-    public List<Student> findAllByTeacherId(Long teacherId/*, PageRequest pageRequest*/) {
+    public Set<Student> findAllByTeacherId(Long teacherId/*, PageRequest pageRequest*/) {
         return studentRepository.findStudentsByTeachersId(teacherId);
     }
 
@@ -57,7 +56,7 @@ public class StudentServiceImpl implements StudentService {
         Teacher teacher = teacherRepository.findById(teacherId)
                 .orElseThrow(
                         () -> new RuntimeException("Can't find a teacher by Id: "
-                        + teacherId));
+                                + teacherId));
         Student student = findById(studentId);
         student.addTeacher(teacher);
         studentRepository.save(student);

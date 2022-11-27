@@ -1,6 +1,5 @@
 package com.example.studentnauczyciel.service.impl;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.example.studentnauczyciel.model.Student;
@@ -30,8 +29,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> findAll(PageRequest pageRequest) {
-        return teacherRepository.findAll(pageRequest).stream().collect(Collectors.toList());
+    public Set<Teacher> findAll(PageRequest pageRequest) {
+        return teacherRepository.findAll(pageRequest).stream().collect(Collectors.toSet());
     }
 
     @Override
@@ -41,14 +40,14 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher findByFirstNameAndLastName(String firstName, String lastName) {
-        return teacherRepository.findByFirstNameIgnoreCaseAndLastNameIgnoreCase(firstName, lastName)
+        return teacherRepository.findTeacherByFirstNameAndLastName(firstName, lastName)
                 .orElseThrow(
                         () -> new RuntimeException("Can't find a teacher by first name: "
                                 + firstName + " and last name: " + lastName));
     }
 
     @Override
-    public List<Teacher> findAllByStudentId(Long studentId) {
+    public Set<Teacher> findAllByStudentId(Long studentId) {
         return teacherRepository.findTeachersByStudentsId(studentId);
     }
 

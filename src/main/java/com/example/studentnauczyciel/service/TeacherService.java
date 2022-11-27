@@ -1,6 +1,5 @@
 package com.example.studentnauczyciel.service;
 
-import java.util.List;
 import java.util.Set;
 import com.example.studentnauczyciel.model.Student;
 import com.example.studentnauczyciel.model.Teacher;
@@ -13,11 +12,11 @@ public interface TeacherService {
 
     void delete(Long id);
 
-    List<Teacher> findAll(PageRequest pageRequest);
+    Set<Teacher> findAll(PageRequest pageRequest);
 
     Teacher findByFirstNameAndLastName(String firstName, String lastName);
 
-    List<Teacher> findAllByStudentId(Long studentId);
+    Set<Teacher> findAllByStudentId(Long studentId);
 
     Set<Student> addStudent(Long teacherId, Long studentId);
 
