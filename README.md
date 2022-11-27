@@ -27,7 +27,6 @@ to add or receive some info. \
 - H2
 - Tomcat
 - Hibernate
-- Spring Web/Security
 - Stream API
 - REST
 - Lombok
@@ -44,7 +43,6 @@ to add or receive some info. \
     db.password=YOUR_PASSWORD
     ...
 ```
-5Run project
 
 ## 🚀 Example of parameters for db.properties
 ``` java
